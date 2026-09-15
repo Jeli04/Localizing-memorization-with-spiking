@@ -86,22 +86,21 @@
 
 \begin{table}[h]
     \caption{
-        General capability after suppression on PIQA with the diagonal Fisher at different step sizes. The suppression direction is calculated with PIQA examples only. Differences are measured in percentage points relative to the unedited perturbed model.
+        General capability after suppression on PIQA with the diagonal Fisher at different step sizes. The suppression direction is calculated with PIQA examples only. Differences are measured in percentage points relative to the unedited model ($\eta=0$), shown in gray. The bold row denotes the reported edit.
     }
     \centering
     \small
     \setlength{\tabcolsep}{7pt}
     \renewcommand{\arraystretch}{1.12}
 
-    \begin{tabular}{@{}lccccc@{}}
+    \begin{tabular}{@{}ccccc@{}}
         \toprule
-        \textbf{Setting}
-        & \textbf{Step}
+        \textbf{Step}
         & \multicolumn{2}{c}{\textbf{ARC-Challenge}}
         & \multicolumn{2}{c}{\textbf{ARC-Easy}} \\
-        \cmidrule(lr){3-4}
-        \cmidrule(lr){5-6}
-        & $\eta$
+        \cmidrule(lr){2-3}
+        \cmidrule(lr){4-5}
+        $\eta$
         & Acc. (\%)
         & $\Delta$
         & Acc. (\%)
@@ -109,29 +108,25 @@
         \midrule
 
         \rowcolor{gray!18}
-        \textbf{No edit (baseline)}
-        & 0
+        0
         & 50.9
         & ---
         & 78.2
         & --- \\
 
-        Small edit
-        & 0.005
+        0.005
         & 52.0
         & $+1.1$
         & 79.7
         & $+1.5$ \\
 
-        \textbf{Reported edit}
-        & \textbf{0.010}
+        \textbf{0.010}
         & \textbf{51.0}
         & $\mathbf{+0.1}$
         & \textbf{77.3}
         & $\mathbf{-0.9}$ \\
 
-        Large edit
-        & 0.030
+        0.030
         & 41.9
         & $-9.0$
         & 58.9
@@ -141,6 +136,7 @@
     \end{tabular}
     \label{tab:piqa-capability}
 \end{table}
+
 \begin{table}[h]
     \centering
     \small

@@ -7,11 +7,8 @@
         Cross benchmark transfer of the suppression direction. Rows are the corpus the direction was
         estimated on, columns the test set it was applied to. Each result reports
         \textbf{accuracy\,/\,agreement} (\%), where agreement is measured against the standard model,
-        and every entry is the unweighted mean across duplication levels. The shaded row is the model
-        before editing. Bold marks the highest agreement per test set. Wikipedia is a passage corpus
-        that shares no examples with any test set, so its row is transfer throughout; the diagonal
-        entries are estimated on the test set they are scored on and are the in-domain reference
-        rather than a transfer result. The step size is selected per entry on validation examples at
+        and every entry is the unweighted mean across duplication levels. Bold marks the highest agreement per test set. Wikipedia is a corpus of book passages and is not a test set; the diagonal
+        entries represent in-domain suppression. The step size is selected per entry on validation examples at
         duplication $0$ and ranges over $\{0.005, 0.01, 0.02\}$.
     }
     \begin{tabular}{@{}l c c c@{}}
