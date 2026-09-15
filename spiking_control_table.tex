@@ -1,0 +1,75 @@
+% Results from experiments/76_spiking_control_table.
+% Values are the unweighted "All" rows of the per-benchmark evaluation tables.
+\begin{table}[h]
+    \centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{1.12}
+    \caption{
+        Suppression as the labeled spiking-data budget shrinks. Each budget is a
+        percentage of every full duplication group; 40\% is the complete training
+        split. Each budget fits its own diagonal-Fisher direction and selects its
+        step $\eta$ on validation. Results are reported on the held-out test split as
+        \textbf{accuracy\,/\,agreement} (\%), with agreement measured against the
+        standard model, and are unweighted means across duplication levels. The
+        shaded row is the perturbed model before editing.
+    }
+    \begin{tabular}{@{}l r cc cc cc@{}}
+        \toprule
+        \textbf{Setting}
+        & \shortstack{\textbf{Fitting}\\\textbf{examples}}
+        & \multicolumn{2}{c}{\textbf{PIQA}}
+        & \multicolumn{2}{c}{\textbf{HellaSwag}}
+        & \multicolumn{2}{c}{\textbf{WinoGrande}} \\
+        \cmidrule(lr){3-4}
+        \cmidrule(lr){5-6}
+        \cmidrule(lr){7-8}
+        &
+        & $\eta$ & Acc.\,/\,Agr.
+        & $\eta$ & Acc.\,/\,Agr.
+        & $\eta$ & Acc.\,/\,Agr. \\
+        \midrule
+
+        \shortstack[l]{\textbf{Target}\\\textit{(standard)}}
+        & ---
+        & --- & 80.4 / 100.0
+        & --- & 61.4 / 100.0
+        & --- & 83.7 / 100.0 \\
+
+        \rowcolor{gray!18}
+        \shortstack[l]{\textbf{No edit}\\\textit{(perturbed)}}
+        & ---
+        & 0 & 89.9 / 85.2
+        & 0 & 78.6 / 76.4
+        & 0 & 90.5 / 81.8 \\
+
+        \midrule
+
+        40\%
+        & 3,200
+        & 0.005 & 84.1 / 92.5
+        & 0.005 & 65.1 / 92.0
+        & 0.010 & 85.6 / 88.2 \\
+
+        20\%
+        & 1,599
+        & 0.010 & 82.1 / 93.1
+        & 0.005 & 65.9 / 91.8
+        & 0.030 & 84.4 / 85.3 \\
+
+        10\%
+        & 797
+        & 0.010 & 82.9 / 92.7
+        & 0.005 & 67.0 / 90.7
+        & 0.010 & 84.9 / 87.2 \\
+
+        5\%
+        & 398
+        & 0.030 & 78.7 / 91.4
+        & 0.010 & 65.2 / 90.8
+        & 0.020 & 84.7 / 85.9 \\
+
+        \bottomrule
+    \end{tabular}
+    \label{tab:spiking-data-budget}
+\end{table}

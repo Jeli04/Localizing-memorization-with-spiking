@@ -22,7 +22,7 @@
         & \cellcolor{gray!18} 0
         & 0.01
         & 0.01
-        & --- \\
+        & 0.01 \\
 
         \midrule
 
@@ -31,42 +31,42 @@
         & \cellcolor{gray!18} 78.7 / 88.4
         & 51.8 / 63.9
         & 78.0 / 93.8
-        & --- \\
+        & 79.8 / 93.7 \\
 
         $1$
         & 82.0 / 100.0
         & \cellcolor{gray!18} 82.5 / 90.5
         & 53.6 / 64.6
         & 81.5 / 93.7
-        & --- \\
+        & 82.8 / 93.8 \\
 
         $4$
         & 81.4 / 100.0
         & \cellcolor{gray!18} 84.2 / 88.8
         & 57.9 / 65.6
         & 80.7 / 93.7
-        & --- \\
+        & 82.0 / 92.2 \\
 
         $16$
         & 81.2 / 100.0
         & \cellcolor{gray!18} 93.8 / 85.7
         & 53.2 / 65.3
         & 82.6 / 91.9
-        & --- \\
+        & 85.7 / 92.2 \\
 
         $64$
         & 80.4 / 100.0
         & \cellcolor{gray!18} 100.0 / 80.4
         & 46.9 / 59.4
         & 88.1 / 90.9
-        & --- \\
+        & 89.5 / 88.1 \\
 
         $256$
         & 77.5 / 100.0
         & \cellcolor{gray!18} 100.0 / 77.5
         & 53.5 / 70.4
         & 83.1 / 94.4
-        & --- \\
+        & 88.7 / 88.7 \\
 
         \midrule
 
@@ -75,7 +75,7 @@
         & \cellcolor{gray!18} \textbf{89.9 / 85.2}
         & \textbf{52.8 / 64.9}
         & \textbf{82.3 / 93.1}
-        & \textbf{--- / ---} \\
+        & \textbf{84.8 / 91.4} \\
 
         \bottomrule
     \end{tabular}
@@ -138,4 +138,65 @@
         \bottomrule
     \end{tabular}
     \label{tab:piqa-capability}
+\end{table}
+\begin{table}[h]
+    \centering
+    \small
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.12}
+    \caption{
+        Membership inference results on PIQA. AUC is computed on each duplication level's members against all dup~$=0$ non-members. \textbf{Projection} is a first-order log-likelihood ratio between the perturbed model and the suppressed model. Reference is an oracle method using the same ratio but with the standard rather than suppressed model. \textbf{All} reports the unweighted mean across duplication levels.
+    }
+    \vspace{2pt}
+    \begin{tabular}{@{}c c c c c@{}}
+        \toprule
+        \textbf{Dup.}
+        & \textbf{Loss}
+        & \textbf{Min-K\%}
+        & \shortstack{\textbf{Projection}\\\textit{(supervised)}}
+        & \cellcolor{gray!18}
+          \shortstack{\textbf{Reference}\\\textit{(oracle)}} \\
+        \midrule
+
+        $1$
+        & 0.571
+        & 0.564
+        & 0.572
+        & \cellcolor{gray!18} 0.582 \\
+
+        $4$
+        & 0.659
+        & 0.655
+        & 0.730
+        & \cellcolor{gray!18} 0.711 \\
+
+        $16$
+        & 0.891
+        & 0.882
+        & 0.932
+        & \cellcolor{gray!18} 0.933 \\
+
+        $64$
+        & 1.000
+        & 1.000
+        & 0.991
+        & \cellcolor{gray!18} 1.000 \\
+
+        $256$
+        & 1.000
+        & 1.000
+        & 0.990
+        & \cellcolor{gray!18} 1.000 \\
+
+        \midrule
+
+        \textbf{All}
+        & \textbf{0.824}
+        & \textbf{0.820}
+        & \textbf{0.843}
+        & \cellcolor{gray!18} \textbf{0.845} \\
+
+        \bottomrule
+    \end{tabular}
+    \label{tab:piqa-mia}
 \end{table}
