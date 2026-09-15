@@ -139,3 +139,64 @@
     \end{tabular}
     \label{tab:piqa-capability}
 \end{table}
+\begin{table}[h]
+    \centering
+    \small
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.12}
+    \caption{
+        Membership inference results on PIQA. AUC is computed on each duplication level's members against all dup~$=0$ non-members. \textbf{Projection} is $-g(z)^\top\Delta\theta$, a first-order log-likelihood ratio between the perturbed model and the suppressed model. Reference is an \textbf{oracle} method using the same ratio but with the \textit{standard} rather than suppressed model.
+    }
+    \vspace{2pt}
+    \begin{tabular}{@{}c c c c c@{}}
+        \toprule
+        \textbf{Dup.}
+        & \textbf{Loss}
+        & \textbf{Min-K\%}
+        & \shortstack{\textbf{Projection}\\\textit{(no reference)}}
+        & \cellcolor{gray!18}
+          \shortstack{\textbf{Reference}\\\textit{(oracle)}} \\
+        \midrule
+
+        $1$
+        & ---
+        & ---
+        & ---
+        & \cellcolor{gray!18} --- \\
+
+        $4$
+        & ---
+        & ---
+        & ---
+        & \cellcolor{gray!18} --- \\
+
+        $16$
+        & ---
+        & ---
+        & ---
+        & \cellcolor{gray!18} --- \\
+
+        $64$
+        & ---
+        & ---
+        & ---
+        & \cellcolor{gray!18} --- \\
+
+        $256$
+        & ---
+        & ---
+        & ---
+        & \cellcolor{gray!18} --- \\
+
+        \midrule
+
+        \textbf{All}
+        & \textbf{---}
+        & \textbf{---}
+        & \textbf{---}
+        & \cellcolor{gray!18} \textbf{---} \\
+
+        \bottomrule
+    \end{tabular}
+    \label{tab:piqa-mia}
+\end{table}
