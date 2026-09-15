@@ -171,7 +171,7 @@ where automatic differentiation first differentiates \(J\) to obtain the paramet
 
 \section{Case study on Hubble}
 
-\textbf{Experimental setup.} We study the suppression of test set contamination on three test sets in Hubble: PIQA, HellaSwag, and WinoGrande, and these three test sets use the model to choose an answer based on the log probabilities of several suffix sequences. Since the choice is based on the loss over many tokens (as opposed to single tokens in MMLU), they are the most stable. The examples are split into train (50\%) / validation (10\%) / and test (50\%) sets. Training examples are used to estimate the contrastive gradient, validation examples are used select the step size, and suppression results are reported on test examples. 
+\textbf{Experimental setup.} We study the suppression of test set contamination on three test sets in Hubble: PIQA, HellaSwag, and WinoGrande, and these three test sets use the model to choose an answer based on the log probabilities of several suffix sequences. Since the choice is based on the loss over many tokens (as opposed to single tokens in MMLU), they are the most stable. The examples are split into train (40\%) / validation (10\%) / and test (50\%) sets. Training examples are used to estimate the contrastive gradient, validation examples are used select the step size, and suppression results are reported on test examples. 
 
 \begin{enumerate}
     \item Counts per dataset (PIQA, Hellaswag, Winogrande)
