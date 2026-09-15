@@ -145,7 +145,7 @@
     \setlength{\tabcolsep}{5pt}
     \renewcommand{\arraystretch}{1.12}
     \caption{
-        Membership inference results on PIQA. AUC is computed on each duplication level's members against all dup~$=0$ non-members. \textbf{Projection} is $-g(z)^\top\Delta\theta$, a first-order log-likelihood ratio between the perturbed model and the suppressed model. Reference is an \textbf{oracle} method using the same ratio but with the \textit{standard} rather than suppressed model.
+        Membership inference results on PIQA. AUC is computed on each duplication level's members against all dup~$=0$ non-members. \textbf{Projection} is $-g(z)^\top\Delta\theta$, a first-order log-likelihood ratio between the perturbed model and the suppressed model. Reference is an \textbf{oracle} method using the same ratio but with the \textit{standard} rather than suppressed model. The \textbf{All} row reports the unweighted mean across duplication levels.
     }
     \vspace{2pt}
     \begin{tabular}{@{}c c c c c@{}}
@@ -153,48 +153,48 @@
         \textbf{Dup.}
         & \textbf{Loss}
         & \textbf{Min-K\%}
-        & \shortstack{\textbf{Projection}\\\textit{(no reference)}}
+        & \shortstack{\textbf{Projection}\\\textit{(supervised)}}
         & \cellcolor{gray!18}
           \shortstack{\textbf{Reference}\\\textit{(oracle)}} \\
         \midrule
 
         $1$
-        & ---
-        & ---
-        & ---
-        & \cellcolor{gray!18} --- \\
+        & 0.571
+        & 0.564
+        & 0.572
+        & \cellcolor{gray!18} 0.582 \\
 
         $4$
-        & ---
-        & ---
-        & ---
-        & \cellcolor{gray!18} --- \\
+        & 0.659
+        & 0.655
+        & 0.730
+        & \cellcolor{gray!18} 0.711 \\
 
         $16$
-        & ---
-        & ---
-        & ---
-        & \cellcolor{gray!18} --- \\
+        & 0.891
+        & 0.882
+        & 0.932
+        & \cellcolor{gray!18} 0.933 \\
 
         $64$
-        & ---
-        & ---
-        & ---
-        & \cellcolor{gray!18} --- \\
+        & 1.000
+        & 1.000
+        & 0.991
+        & \cellcolor{gray!18} 1.000 \\
 
         $256$
-        & ---
-        & ---
-        & ---
-        & \cellcolor{gray!18} --- \\
+        & 1.000
+        & 1.000
+        & 0.990
+        & \cellcolor{gray!18} 1.000 \\
 
         \midrule
 
         \textbf{All}
-        & \textbf{---}
-        & \textbf{---}
-        & \textbf{---}
-        & \cellcolor{gray!18} \textbf{---} \\
+        & \textbf{0.824}
+        & \textbf{0.820}
+        & \textbf{0.843}
+        & \cellcolor{gray!18} \textbf{0.845} \\
 
         \bottomrule
     \end{tabular}
