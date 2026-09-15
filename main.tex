@@ -173,17 +173,11 @@ where automatic differentiation first differentiates \(J\) to obtain the paramet
 
 \textbf{Experimental setup.} We study the suppression of test set contamination on three test sets in Hubble: PIQA, HellaSwag, and WinoGrande, and these three test sets use the model to choose an answer based on the log probabilities of several suffix sequences. Since the choice is based on the loss over many tokens (as opposed to single tokens in MMLU), they are the most stable. The examples are split into train (40\%) / validation (10\%) / and test (50\%) sets. Training examples are used to estimate the contrastive gradient, validation examples are used select the step size, and suppression results are reported on test examples. 
 
-\begin{enumerate}
-    \item Counts per dataset (PIQA, Hellaswag, Winogrande)
-    \item Suppression results (Fisher Diagonal, K-FAC)
-    \item Capabilities after suppression (ARC easy, ARC challenging).
-    \item Transfer results on suppression (PIQA, Hellaswag, Winogrande)
-    \item Suppression results with small spiked sets (Fisher Diagonal, K-FAC)
-    \item Detection results (MIA, compare to reference metric)
-\end{enumerate}
 
 \begin{enumerate}
     \item The step size is chosen on the validation set. It is the step that best minimizes the accuracy difference between members and non-members.
+
+    \item Fisher diagonals are calculated on gradients from non-members and members. K-FAC are trained on data from non-members. 
 \end{enumerate}
 
 \input{counts_table}
