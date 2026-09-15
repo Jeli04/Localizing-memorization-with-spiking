@@ -1,0 +1,141 @@
+\begin{table}[h]
+    \centering
+    \small
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.12}
+    \caption{
+        Suppression on PIQA using different Hessian approximations. Each result reports \textbf{accuracy\,/\,agreement} (\%), where agreement is measured against the standard model. The shaded column is baseline and the model before editing. The \textbf{All} row reports the unweighted mean across duplication levels.
+    }
+    \begin{tabular}{@{}c c c c c c@{}}
+        \toprule
+        \textbf{Dup.}
+        & \shortstack{\textbf{Target}\\\textit{(standard)}}
+        & \cellcolor{gray!18}
+          \shortstack{\textbf{No edit}\\\textit{(perturbed)}}
+        & \shortstack{\textbf{No}\\\textbf{Hessian}}
+        & \shortstack{\textbf{Diagonal}\\\textbf{Fisher}}
+        & \textbf{K-FAC} \\
+        \midrule
+
+        $\eta$
+        & ---
+        & \cellcolor{gray!18} 0
+        & ---
+        & 0.01
+        & --- \\
+
+        \midrule
+
+        $0$
+        & 79.7 / 100.0
+        & \cellcolor{gray!18} 78.7 / 88.4
+        & ---
+        & 78.1 / 93.5
+        & --- \\
+
+        $1$
+        & ---
+        & \cellcolor{gray!18} ---
+        & ---
+        & ---
+        & --- \\
+
+        $4$
+        & ---
+        & \cellcolor{gray!18} ---
+        & ---
+        & ---
+        & --- \\
+
+        $16$
+        & ---
+        & \cellcolor{gray!18} ---
+        & ---
+        & ---
+        & --- \\
+
+        $64$
+        & 80.4 / 100.0
+        & \cellcolor{gray!18} 100.0 / 80.4
+        & ---
+        & 87.4 / 90.2
+        & --- \\
+
+        $256$
+        & ---
+        & \cellcolor{gray!18} ---
+        & ---
+        & ---
+        & --- \\
+
+        \midrule
+
+        \textbf{All}
+        & \textbf{--- / 100.0}
+        & \cellcolor{gray!18} \textbf{--- / ---}
+        & \textbf{--- / ---}
+        & \textbf{--- / ---}
+        & \textbf{--- / ---} \\
+
+        \bottomrule
+    \end{tabular}
+    \label{tab:curvature-approximation}
+\end{table}
+
+\begin{table}[h]
+    \caption{
+        General capability after suppression on PIQA with the diagonal Fisher at different step sizes. The suppression direction is calculated with PIQA examples only. Differences are measured in percentage points relative to the unedited perturbed model.
+    }
+    \centering
+    \small
+    \setlength{\tabcolsep}{7pt}
+    \renewcommand{\arraystretch}{1.12}
+
+    \begin{tabular}{@{}lccccc@{}}
+        \toprule
+        \textbf{Setting}
+        & \textbf{Step}
+        & \multicolumn{2}{c}{\textbf{ARC-Challenge}}
+        & \multicolumn{2}{c}{\textbf{ARC-Easy}} \\
+        \cmidrule(lr){3-4}
+        \cmidrule(lr){5-6}
+        & $\eta$
+        & Acc. (\%)
+        & $\Delta$
+        & Acc. (\%)
+        & $\Delta$ \\
+        \midrule
+
+        \rowcolor{gray!18}
+        \textbf{No edit (baseline)}
+        & 0
+        & 50.9
+        & ---
+        & 78.2
+        & --- \\
+
+        Small edit
+        & 0.005
+        & 52.0
+        & $+1.1$
+        & 79.7
+        & $+1.5$ \\
+
+        \textbf{Reported edit}
+        & \textbf{0.010}
+        & \textbf{51.0}
+        & $\mathbf{+0.1}$
+        & \textbf{77.3}
+        & $\mathbf{-0.9}$ \\
+
+        Large edit
+        & 0.030
+        & 41.9
+        & $-9.0$
+        & 58.9
+        & $-19.3$ \\
+
+        \bottomrule
+    \end{tabular}
+    \label{tab:piqa-capability}
+\end{table}

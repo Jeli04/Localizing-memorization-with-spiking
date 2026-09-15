@@ -1,0 +1,34 @@
+\begin{table}[t]
+    \centering
+    \scriptsize
+    \setlength{\tabcolsep}{3.6pt}
+    
+    \resizebox{\columnwidth}{!}{%
+    \begin{tabular}{lccc ccc}
+        \toprule
+        & \multicolumn{3}{c}{\textbf{Mid}} 
+        & \multicolumn{3}{c}{\textbf{High}} \\
+        \cmidrule(lr){2-4} 
+        \cmidrule(lr){5-7}
+        
+        \textbf{Source} 
+        & \textbf{WG} 
+        & \textbf{MMLU} 
+        & \textbf{PopQA} 
+        & \textbf{WG} 
+        & \textbf{MMLU} 
+        & \textbf{PopQA} \\
+        \midrule
+        
+        Naive       & 3.0 & 6.4 & 11.6 & 4.6 & 13.1 & 24.0 \\
+        \midrule
+         MMLU        & 2.3 & 5.6 & 4.3  & 2.4 & 4.7  & 5.8 \\
+        PopQA       & 2.2 & 5.8 & 5.0  & 2.6 & 6.7  & 8.6 \\
+        Wikipedia   & 1.3 & 6.9 & 3.9  & 1.4 & 5.5  & 5.8 \\
+        \bottomrule
+    \end{tabular}%
+    }
+    
+    \caption{Cross benchmark transfer.}
+    \label{fig:cross_benchmark_transfer}
+\end{table}

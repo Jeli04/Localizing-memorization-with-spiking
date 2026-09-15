@@ -1,0 +1,199 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{biblatex}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+
+\title{Localizing latent mechanisms in weight space by spiking the training data}
+\author{Johnny, Gustavo, Jerry, Yanai, Robin}
+\date{September 2026}
+
+\bibliography{bibtex}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+% refer to https://coefficientgiving.org/tailwind/initiatives/
+
+The worst case scenarios of AI likely involve the use of \textit{latent mechanisms} \cite{kokotajlo2025ai2027}. We define latent mechanisms as those used in the model's internal computation, yet their use is hidden and cannot be identified from model outputs alone. For instance, when a model answers a benchmark example incorrectly, whether the model had made a mistake or answered deceptively cannot be determined without looking at the model internals. Memorization, evaluation awareness, and deception are all safety relevant and their mechanisms can be latent \cite{carlini_extracting_2021,needham2025largelanguagemodelsknow, smith2025difficultiesevaluatingdeceptiondetector}. We urgently lack the tools to detect and suppress latent mechanisms \cite{korbak2025chainthoughtmonitorabilitynew}, and this report proposes a principled localization method.
+
+The localization of single facts is well studied, and the same methods used to localize are also useful for making factual edits within the model \cite{meng2022locating}. Localizing latent mechanisms presents more challenges. We show that real headway can be made on this problem by \textit{spiking} the model's training data \cite{wei2026statistically, wei2026correctingtestsetcontamination}. Spiking generalizes canaries beyond their typical use case of measuring privacy leakage \cite{steinke2023privacy}. By carefully designing and spiking canaries into training to induce certain failure modes, we can later trace back these failures to the weight space with influence functions. In this view, spiking embeds a randomized experiment in the model to identify a latent mechanism of interest.
+
+\section{Influence functions on spiked data}
+
+Our derivation is general but we will first consider memorization. In Hubble, we have perturbed models spiked with different data (books, biographies, and test sets) at random \cite{wei2026hubble}. For the perturbed model, let \(L_1(\theta)\) denote the expected loss on spiked members and \(L_0(\theta)\) the expected loss on distributionally matched nonmembers. The counterfactual memorization \cite{zhang_2023_counterfactual, feldman_2020_learning} is
+\begin{equation}
+    M(\theta)
+    =
+    L_0(\theta)-L_1(\theta)
+\end{equation}
+and this difference isolates the reduction in loss due to memorization and removes any variation attributable to the examples themselves. This difference is also called an identification and is a fundamental component of causal analysis \cite{angrist_2009_mostly}. Let \(J(\theta)\) denote the original training objective and let
+\begin{equation}
+    \hat{\theta}
+    =
+    \arg\min_\theta J(\theta)
+\end{equation}
+be the trained parameters. Our goal is to find a direction such that moving the weights in this direction would steeply reduce $M(\theta)$ while preserving capabilities. We can apply influence functions to find this direction \cite{koh_understanding_2017}, and using it for localization is novel. To measure the influence of memorization on the model weights, consider the perturbing the objective by $M$:
+\begin{equation}
+    \hat{\theta}_\epsilon
+    =
+    \arg\min_\theta
+    \left[
+        J(\theta)
+        +
+        \epsilon M(\theta)
+    \right]
+    \label{eq:perturbed-objective}
+\end{equation}
+where setting $\epsilon=0$ would recover $\hat{\theta}$. By assumption, the first-order optimality condition gives us
+\begin{equation}
+    \nabla_\theta J(\hat{\theta}_\epsilon)
+    +
+    \epsilon
+    \nabla_\theta M(\hat{\theta}_\epsilon)
+    =
+    0
+\end{equation}
+and differentiating this expression with respect to \(\epsilon\) at \(\epsilon=0\) gives
+\begin{equation}
+    H
+    \left.
+    \frac{d\hat{\theta}_\epsilon}{d\epsilon}
+    \right|_{\epsilon=0}
+    +
+    \nabla_\theta M(\hat{\theta})
+    =
+    0
+\end{equation}
+where $H=\nabla_\theta^2 J(\hat{\theta})$
+is the Hessian of the training objective at the learned parameters. With
+\begin{equation}
+    \nabla_\theta M(\theta)
+    =
+    \nabla_\theta L_0(\theta)
+    -
+    \nabla_\theta L_1(\theta)
+    \label{eq:memorization-gradient}
+\end{equation}
+the influence function is therefore
+\begin{equation}
+    \boxed{
+    \left.
+    \frac{d\hat{\theta}_\epsilon}{d\epsilon}
+    \right|_{\epsilon=0}
+    =
+    -H^{-1}
+    \left(
+        \nabla_\theta L_0(\hat{\theta})
+        -
+        \nabla_\theta L_1(\hat{\theta})
+    \right)
+    }.
+    \label{eq:memorization-influence}
+\end{equation}
+This tells us, at our current $\hat{\theta}$, how the weights would move if we started to penalize memorization in the objective function. Alternatively, it is also a curvature adjusted step to minimize the combined objective.
+
+\paragraph{Suppression.} Moving the parameters by a small amount along the influence direction $\Delta\theta = H^{-1}\nabla_\theta M(\hat{\theta})$ suppresses memorization. For a step size \(\eta>0\)
+\begin{equation}
+    \theta_{\mathrm{sup}}
+    =
+    \hat{\theta}
+    -
+    \eta \Delta\theta
+    \label{eq:memorization-suppression}
+\end{equation}
+the resulting model \(\theta_{\mathrm{sup}}\) reduces memorization while minimizing the increase in the original training objective. The direction $\Delta\theta$ localizes an intrinsic behavior and is similar to a task vector \cite{ilharco2023editing}.
+
+\paragraph{Detection.} The influence direction also implies a detector. For a
+candidate example \(z\), the negative log-likelihood loss of the example is \(\ell(\theta;z)=-\log p_\theta(z)\). A Taylor expansion of \(\ell(\theta_{\mathrm{sup}};z)\) in the likelihood ratio gives
+\begin{equation}
+    \begin{aligned}
+        \log\frac{p_{\hat{\theta}}(z)}
+                  {p_{\theta_{\mathrm{sup}}}(z)}
+        &=
+        \ell(\theta_{\mathrm{sup}};z)
+        -
+        \ell(\hat{\theta};z) \\
+        &\approx
+        -\eta\,g(z)^\top\Delta\theta
+    \end{aligned}
+\end{equation}
+with \(g(z)=\nabla_\theta\ell(\hat{\theta};z)\). The gradient projection $-g(z)^\top\Delta\theta$ is a first-order approximation of the log-likelihood ratio between the original model and its suppressed counterpart. This form resembles a log likelihood ratio membership attack, with the suppressed model serving as the reference model \cite{pmlr-v97-sablayrolles19a}. 
+
+\section{Computing the inverse Hessian product}
+
+Computing the inverse Hessian product is non-trivial and many works on training data attribution focus on approximating it \cite{park_trak_2023}. In data attribution, a prediction is typically attributed back to every single data point, but a fortunate difference between our setting and data attribution is that we only need to compute one inverse Hessian product. We will now cover a few approximations of increasing complexity.
+
+\paragraph{No Hessian.} The coarsest approximation is to use no Hessian at all. This takes an unconditioned linear step on the contrastive gradient \(\nabla_\theta L_0(\hat{\theta})- \nabla_\theta L_1(\hat{\theta})\) to reduce $M(\hat{\theta})$.
+
+\paragraph{Diagonal Fisher.} A simple improvement to the linear step is to precondition the contrastive gradient with the damped diagonal Fisher matrix with $H \approx \operatorname{diag}(F)+\lambda I$, and the Fisher can be empirically estimated with examples from the pretraining corpus. This rescales each parameter update by its second moment across examples, using damping to avoid large updates to parameters with small second moments. This resembles coordinate-wise scaling in Adam \cite{kingma2015adam}, but divides directly by the second moment rather than the square root.
+
+\paragraph{K-FAC.} Preconditioning with the diagonal Fisher matrix ignores interactions between parameters. While the full Fisher matrix is still too large, interactions within each linear layer can be estimated with a layerwise K-FAC approximation \cite{martens_optimizing_2015}. For a layer $h=Wa$, with input activation $a$ and backward signal $b=\nabla_h\ell$, the Fisher block for $W$ is approximated with
+\begin{equation}
+    F_W
+    \approx
+    \mathbb{E}[aa^\top]
+    \otimes
+    \mathbb{E}[bb^\top],
+\end{equation}
+where $\otimes$ denotes the Kronecker product. This factorization only requires the Fisher to be estimated and inverted once, which enables efficient estimation of data influence in large language models \cite{grosse2023studyinglargelanguagemodel}.
+
+\paragraph{Conjugate gradient.}
+A damped inverse Hessian--vector product can be computed using conjugate gradient, as in \cite{koh_understanding_2017}. Writing \(v=\nabla_\theta M(\hat{\theta})\) and \(A=H+\lambda I\), conjugate gradient solves for \(\Delta\theta\) in the linear system
+\begin{equation}
+    A\Delta\theta=v
+\end{equation}
+where the solution is iteratively refined through a process similar to Gram--Schmidt. Whereas Gram--Schmidt constructs orthogonal directions under the standard inner product, conjugate gradient constructs directions orthogonal under 
+\(\langle x,y\rangle_A=x^\top Ay\). This procedure requires only Hessian--vector products, and does not store \(H\). Since \(H=\nabla_\theta^2J(\hat{\theta})\), the Hessian--vector product can be computed with
+\begin{equation}
+    Hu
+    =
+    \nabla_\theta
+    \underbrace{
+        \Bigl[
+            \bigl(
+                \underbrace{
+                    \nabla_\theta J(\theta)
+                }_{\text{vector}}
+            \bigr)^\top u
+        \Bigr]
+    }_{\text{scalar}}
+    \rvert_{\theta=\hat{\theta}}
+\end{equation}
+where automatic differentiation first differentiates \(J\) to obtain the parameter gradients and then differentiates the dot product of the gradients and \(u\). Each conjugate gradient iteration requires one Hessian--vector product, which is implemented using two backward passes. Although it is typically too expensive for training data attribution, it is reasonable for our purposes as we only compute it once for each behavioral direction.
+
+\paragraph{Notes.} Several of these methods are implemented in Bergson \cite{quirke2026bergsonopensourcelibrary}. By using model checkpoints, we can relax convergence assumptions and increase the fidelity of the influence functions \cite{bae2024training}. It may also be useful to make multiple quadratic steps rather than just one.
+
+\section{Case study on Hubble}
+
+\textbf{Experimental setup.} We study the suppression of test set contamination on three test sets in Hubble: PIQA, HellaSwag, and WinoGrande, and these three test sets use the model to choose an answer based on the log probabilities of several suffix sequences. Since the choice is based on the loss over many tokens (as opposed to single tokens in MMLU), they are the most stable. The examples are split into train (50\%) / validation (10\%) / and test (50\%) sets. Training examples are used to estimate the contrastive gradient, validation examples are used select the step size, and suppression results are reported on test examples. 
+
+\begin{enumerate}
+    \item Counts per dataset (PIQA, Hellaswag, Winogrande)
+    \item Suppression results (Fisher Diagonal, K-FAC)
+    \item Capabilities after suppression (ARC easy, ARC challenging).
+    \item Transfer results on suppression (PIQA, Hellaswag, Winogrande)
+    \item Suppression results with small spiked sets (Fisher Diagonal, K-FAC)
+    \item Detection results (MIA, compare to reference metric)
+\end{enumerate}
+
+\input{counts_table}
+
+\input{piqa_results}
+
+\clearpage
+
+\section{Next steps}
+
+% this is where Om and Avi can help us
+
+Hubble is still a relatively toy setting. Ideally, the models would be larger. For memorization, we may want to capture a memorization mechanism that was not trained with exact duplicates. We also would like to localize latent mechanisms beyond memorization. Our formulation here makes clear that spiking is an important element, and the latent mechanism needs to be described in terms of a contrast. 
+
+\printbibliography
+
+\end{document}
