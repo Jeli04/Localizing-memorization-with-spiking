@@ -1,45 +1,61 @@
-\begin{table}[t]
+\begin{table}[h]
     \centering
-    \scriptsize
-    \setlength{\tabcolsep}{3.6pt}
-
-    \resizebox{\columnwidth}{!}{%
-    \begin{tabular}{lccc ccc}
+    \small
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.12}
+    \caption{
+        Cross benchmark transfer of the suppression direction. Rows are the corpus the direction was
+        estimated on, columns the test set it was applied to. Each result reports
+        \textbf{accuracy\,/\,agreement} (\%), where agreement is measured against the standard model,
+        and every entry is the unweighted mean across duplication levels. The shaded row is the model
+        before editing. Bold marks the highest agreement per test set. Wikipedia is a passage corpus
+        that shares no examples with any test set, so its row is transfer throughout; the diagonal
+        entries are estimated on the test set they are scored on and are the in-domain reference
+        rather than a transfer result. The step size is selected per entry on validation examples at
+        duplication $0$ and ranges over $\{0.005, 0.01, 0.02\}$.
+    }
+    \begin{tabular}{@{}l c c c@{}}
         \toprule
-        & \multicolumn{3}{c}{\textbf{Avg.\ edited accuracy (\%)}}
-        & \multicolumn{3}{c}{\textbf{Avg.\ disagreement with twin (\%)}} \\
-        \cmidrule(lr){2-4}
-        \cmidrule(lr){5-7}
-
         \textbf{Source}
         & \textbf{PIQA}
-        & \textbf{HSwag}
-        & \textbf{WG}
-        & \textbf{PIQA}
-        & \textbf{HSwag}
-        & \textbf{WG} \\
+        & \textbf{HellaSwag}
+        & \textbf{WinoGrande} \\
         \midrule
 
-        Twin (target) & 80.4 & 61.4 & 83.7 & --- & --- & --- \\
-        Naive         & 89.9 & 78.6 & 90.5 & 14.8 & 23.6 & 18.2 \\
+        \shortstack[l]{\textbf{Target}\\\textit{(standard)}}
+        & 80.4 / 100.0
+        & 61.4 / 100.0
+        & 83.7 / 100.0 \\
+
+        \rowcolor{gray!18}
+        \shortstack[l]{\textbf{No edit}\\\textit{(perturbed)}}
+        & 89.9 / 85.2
+        & 78.6 / 76.4
+        & 90.5 / 81.8 \\
+
         \midrule
-        PIQA          & 84.3 & 65.4 & 88.2 & \textbf{7.5} & 8.5 & 14.6 \\
-        HellaSwag     & 84.3 & 64.9 & 87.5 & 7.9 & \textbf{8.1} & 14.7 \\
-        WinoGrande    & 84.0 & 62.0 & 85.5 & 7.7 & 8.2 & \textbf{11.7} \\
-        Wikipedia     & 84.1 & 63.7 & 86.9 & 7.8 & 8.2 & 13.7 \\
+
+        PIQA
+        & 84.3 / \textbf{92.5}
+        & 65.4 / 91.5
+        & 88.2 / 85.4 \\
+
+        HellaSwag
+        & 84.3 / 92.1
+        & 64.9 / \textbf{91.9}
+        & 87.5 / 85.3 \\
+
+        WinoGrande
+        & 84.0 / 92.3
+        & 62.0 / 91.8
+        & 85.5 / \textbf{88.3} \\
+
+        Wikipedia
+        & 84.1 / 92.2
+        & 63.7 / 91.8
+        & 86.9 / 86.3 \\
+
         \bottomrule
-    \end{tabular}%
-    }
-
-    \caption{Cross benchmark transfer. Rows are the corpus the edit direction was fit on, columns
-    the benchmark it was applied to; \emph{Naive} is the contaminated checkpoint with no edit and
-    \emph{Twin} is the uncontaminated model the edit is trying to recover. Every cell averages the
-    six duplication levels $\{0,1,4,16,64,256\}$, each counted once. The step is chosen per cell as
-    the one minimising disagreement at $\text{dup}=0$, items neither model was trained on, so no
-    cell is selected on a contaminated row. Disagreement is the headline metric: it is the share of
-    test items the edited model answers differently from the twin, and unlike accuracy it cannot be
-    lowered by damaging the model. Bold marks the best source per benchmark. Accuracy is left
-    unbolded because averaging signed gaps lets an overshoot at one duplication level pay for an
-    undershoot at another; WinoGrande $\rightarrow$ HellaSwag is the one cell where this happens.}
-    \label{fig:cross_benchmark_transfer}
+    \end{tabular}
+    \label{tab:cross-benchmark-transfer}
 \end{table}
